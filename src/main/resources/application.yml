@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  application:
+    name: java-system-design
+  threads:
+    virtual:
+      enabled: true # Java 21 Virtual Threads for all Tomcat HTTP requests and Spring TaskExecutors
+
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+
+  datasource:
+    url: jdbc:h2:mem:systemdesigndb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true # Kubernetes Liveness and Readiness probes
